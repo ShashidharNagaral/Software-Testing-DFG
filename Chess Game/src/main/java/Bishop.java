@@ -3,8 +3,15 @@ public class Bishop extends ChessPiece{
         super(x, y, color, chessBoard);
     }
 
-    // TODO: here we will write the bishop move rules
-    private boolean bishopMovement(int newX, int newY) {
+    @Override
+    public boolean canMoveTo(int toNewX, int toNewY){
+        if(isCorrectMove(toNewX,toNewY)){
+            return checkBishopMovement(toNewX, toNewY);
+        }
         return false;
+    }
+
+    private boolean checkBishopMovement(int toNewX, int toNewY) {
+        return checkDiagonalMovement(toNewX, toNewY);
     }
 }
