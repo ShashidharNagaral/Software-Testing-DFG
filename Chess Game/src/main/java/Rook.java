@@ -3,8 +3,15 @@ public class Rook extends ChessPiece{
         super(x, y, color, chessBoard);
     }
 
-    // TODO: here we will write the rook move rules
-    private boolean rookMovement(int newX, int newY) {
+    @Override
+    public boolean canMoveTo(int toNewX, int toNewY){
+        if(isCorrectMove(toNewX,toNewY)){
+            return checkRookMovement(toNewX, toNewY);
+        }
         return false;
+    }
+
+    private boolean checkRookMovement(int toNewX, int toNewY) {
+        return checkStraightMovement(toNewX, toNewY);
     }
 }

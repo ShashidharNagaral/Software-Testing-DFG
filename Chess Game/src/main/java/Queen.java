@@ -3,8 +3,15 @@ public class Queen extends ChessPiece{
         super(x, y, color, chessBoard);
     }
 
-    // TODO: here we will write the queen move rules
-    private boolean queenMovement(int newX, int newY){
+    @Override
+    public boolean canMoveTo(int toNewX, int toNewY){
+        if(isCorrectMove(toNewX,toNewY)){
+            return checkQueenMovement(toNewX, toNewY);
+        }
         return false;
+    }
+
+    private boolean checkQueenMovement(int toNewX, int toNewY){
+        return checkStraightMovement(toNewX, toNewY) || checkDiagonalMovement(toNewX, toNewY);
     }
 }
