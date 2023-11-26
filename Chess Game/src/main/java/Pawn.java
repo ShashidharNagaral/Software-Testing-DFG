@@ -15,9 +15,15 @@ public class Pawn extends ChessPiece{
     private boolean checkPawnMovement(int toNewX, int toNewY){
         int moveOneStep;
         int moveTwoStep;
+
+        int currX = this.getX();
+        int currY = this.getY();
+
+        COLOR currColor = this.getColor();
+
         ChessPiece pieceAtNewXY = chessBoard.chessPieceAt(toNewX, toNewY);
 
-        if (this.getColor() == COLOR.BLACK){
+        if (currColor == COLOR.BLACK){
             moveOneStep = 1;
             moveTwoStep = 2;
         }
@@ -27,22 +33,22 @@ public class Pawn extends ChessPiece{
         }
 
         // Conditions for moving the pawn one step forward
-        if(toNewX - this.getX() == moveOneStep) {
+        if(toNewX - currX == moveOneStep) {
             // to move one step straight forward check if there is no piece at the new location
-            if(toNewY == this.getY() && pieceAtNewXY == null) {
+            if(toNewY == currY && pieceAtNewXY == null) {
                 return true;
             }
 
             // to move one step diagonally check if there is a piece already at that new location
-            if(Math.abs(this.getY() - toNewY) == 1 && pieceAtNewXY != null) {
+            if(Math.abs(currY - toNewY) == 1 && pieceAtNewXY != null) {
                 return true;
             }
         }
         // Conditions for moving the pawn two steps forward
         // this is only possible if the pawn has never moved before in the entire game play
         else if(!hasMoved) {
-            if (toNewX - this.getX() == moveTwoStep){
-                if (toNewY == this.getY() && pieceAtNewXY == null){
+            if (toNewX - currX == moveTwoStep){
+                if (toNewY == currY && pieceAtNewXY == null){
                     return true;
                 }
             }

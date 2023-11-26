@@ -12,8 +12,11 @@ public class Knight extends ChessPiece{
 
     private boolean checkKnightMovement(int toNewX, int toNewY) {
 
-        int absX = Math.abs(toNewX - this.getX()); // absolute difference between new X location and current X location
-        int absY = Math.abs(toNewY - this.getY()); // absolute difference between new Y location and current Y location
+        int currX = this.getX();
+        int currY = this.getY();
+
+        int absX = Math.abs(toNewX - currX); // absolute difference between new X location and current X location
+        int absY = Math.abs(toNewY - currY); // absolute difference between new Y location and current Y location
 
         if (absX == 2 && absY == 1) {
             return true;
