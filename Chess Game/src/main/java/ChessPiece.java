@@ -9,12 +9,15 @@ public class ChessPiece {
     protected boolean hasMoved; // to check if the piece has moved atleast once in the game
 
 
+
     public ChessPiece(int x, int y, COLOR color, ChessBoard chessBoard) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.chessBoard = chessBoard;
         this.hasMoved = false;
+
+        chessBoard.putPieceOnBoard(this, x, y);
     }
 
     public int getX() {
@@ -30,7 +33,6 @@ public class ChessPiece {
     }
 
     public boolean canMoveTo(int toNewX, int toNewY){
-
         return isCorrectMove(toNewX, toNewY);
     }
 
@@ -42,6 +44,48 @@ public class ChessPiece {
             if (pieceAtNewXY.getColor() != this.color) return true;
         }
         return false;
+    }
+
+    //  call this method to move the current from current location to new location x, y
+    // returns false if move is not possible
+    public boolean moveTo(int x, int y) {
+
+        // check if move to new location is invalid
+        if(!this.canMoveTo(x, y))
+            return false;
+
+        int currX = this.getX();
+        int currY= this.getY();
+
+        // check if the current piece is at the  given
+        if(this.chessBoard.chessPieceAt(currX, currY) == this) {
+            this.chessBoard.removePieceFromBoard(this); // remove the piece from the current location
+        } else {
+            System.out.println("Invalid move: piece location is not current!");
+            return false;
+        }
+
+        // update the location of piece
+        this.x = x;
+        this.y = y;
+
+
+        // check if whether the target location has any piece
+
+        ChessPiece targetLocationPiece = this.chessBoard.chessPieceAt(x, y);
+
+        // remove the piece at target location
+        if(targetLocationPiece != null) {
+            this.chessBoard.capturePiece(targetLocationPiece);
+        }
+
+        // place piece
+        this.chessBoard.putPieceOnBoard(this, x, y);
+
+        // update the hasMoved property of a piece
+        this.hasMoved = true;
+
+        return true;
     }
 
     protected boolean checkStraightMovement(int toNewX, int toNewY) {
