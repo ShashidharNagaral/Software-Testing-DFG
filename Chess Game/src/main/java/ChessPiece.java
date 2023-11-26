@@ -20,6 +20,14 @@ public class ChessPiece {
         chessBoard.putPieceOnBoard(this, x, y);
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public int getX() {
         return x;
     }
@@ -48,11 +56,11 @@ public class ChessPiece {
 
     //  call this method to move the current from current location to new location x, y
     // returns false if move is not possible
-    public boolean moveTo(int x, int y) {
+    public void moveTo(int x, int y) {
 
         // check if move to new location is invalid
-        if(!this.canMoveTo(x, y))
-            return false;
+//        if(!this.canMoveTo(x, y))
+//            return false;
 
         int currX = this.getX();
         int currY= this.getY();
@@ -62,7 +70,7 @@ public class ChessPiece {
             this.chessBoard.removePieceFromBoard(this); // remove the piece from the current location
         } else {
             System.out.println("Invalid move: piece location is not current!");
-            return false;
+            return;
         }
 
         // update the location of piece
@@ -84,8 +92,6 @@ public class ChessPiece {
 
         // update the hasMoved property of a piece
         this.hasMoved = true;
-
-        return true;
     }
 
     protected boolean checkStraightMovement(int toNewX, int toNewY) {
@@ -182,10 +188,11 @@ public class ChessPiece {
             }
 
             if (toNewY < currY){
-                yStart = (orientation == -1) ? toNewY : currY;
+                yStart = (orientation == -1) ? currY : toNewY;
+
             }
             else if (toNewY > currY){
-                yStart = (orientation == -1) ? currY : toNewY;
+                yStart = (orientation == 1) ? currY : toNewY;
             } else {
                 return false;
             }
@@ -193,13 +200,15 @@ public class ChessPiece {
             xStart++;
 
             // y movement of a piece depends on the orientation of the move
-            yStart+=orientation;
+            yStart = yStart + orientation;
 
             // Loop to see if any piece is in between
-            for(;xStart < xFinish; xStart++, yStart+=orientation){
+            for(;xStart < xFinish;){
                 if (chessBoard.chessPieceAt(xStart, yStart) != null){
                     return false;
                 }
+                xStart++;
+                yStart = yStart + orientation;
             }
             return true;
         }

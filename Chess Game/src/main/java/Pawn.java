@@ -33,22 +33,22 @@ public class Pawn extends ChessPiece{
         }
 
         // Conditions for moving the pawn one step forward
-        if(toNewX - currX == moveOneStep) {
+        if((toNewY - currY) == moveOneStep) {
             // to move one step straight forward check if there is no piece at the new location
-            if(toNewY == currY && pieceAtNewXY == null) {
+            if(toNewX == currX && pieceAtNewXY == null) {
                 return true;
             }
 
             // to move one step diagonally check if there is a piece already at that new location
-            if(Math.abs(currY - toNewY) == 1 && pieceAtNewXY != null) {
+            if(Math.abs(currX - toNewX) == 1 && pieceAtNewXY != null) {
                 return true;
             }
         }
         // Conditions for moving the pawn two steps forward
         // this is only possible if the pawn has never moved before in the entire game play
-        else if(!hasMoved) {
-            if (toNewX - currX == moveTwoStep){
-                if (toNewY == currY && pieceAtNewXY == null){
+        else if(!this.hasMoved) {
+            if ((toNewY - currY) == moveTwoStep){
+                if (toNewX == currX && pieceAtNewXY == null){
                     return true;
                 }
             }

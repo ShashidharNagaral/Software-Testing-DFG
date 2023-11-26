@@ -62,8 +62,8 @@ public class ChessGame {
         this.blackPieces.add(new Rook(7, 0, COLOR.BLACK, this.chessBoard));
 
         // put black knight
-        this.blackPieces.add(new Rook(1, 0, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Rook(6, 0, COLOR.BLACK, this.chessBoard));
+        this.blackPieces.add(new Knight(1, 0, COLOR.BLACK, this.chessBoard));
+        this.blackPieces.add(new Knight(6, 0, COLOR.BLACK, this.chessBoard));
 
         // put black bishops
         this.blackPieces.add(new Bishop(2, 0, COLOR.BLACK, this.chessBoard));
@@ -91,8 +91,8 @@ public class ChessGame {
         this.whitePieces.add(new Rook(7, 7, COLOR.WHITE, this.chessBoard));
 
         // put white knight
-        this.whitePieces.add(new Rook(1, 7, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Rook(6, 7, COLOR.WHITE, this.chessBoard));
+        this.whitePieces.add(new Knight(1, 7, COLOR.WHITE, this.chessBoard));
+        this.whitePieces.add(new Knight(6, 7, COLOR.WHITE, this.chessBoard));
 
         // put white bishops
         this.whitePieces.add(new Bishop(2, 7, COLOR.WHITE, this.chessBoard));
@@ -127,6 +127,8 @@ public class ChessGame {
             int newX;
             int newY;
             ChessPiece pieceAtXY = null;
+            boolean moved;
+
             if(playerPiece == null) {
                 System.out.println("No piece at given location!");
                 continue;
@@ -142,16 +144,20 @@ public class ChessGame {
 
                 pieceAtXY = this.chessBoard.chessPieceAt(newX, newY);
 
+                moved = playerPiece.hasMoved;
+
                 // check if a player can move playerPiece to new location
-                if(!playerPiece.moveTo(newX, newY)) {
+                if(!playerPiece.canMoveTo(newX, newY)) {
                     System.out.println("Invalid move!");
                     continue;
+                } else {
+                    playerPiece.moveTo(newX, newY);
                 }
             }
 
             // after the player's move the king should not have any check
             if(isKingInCheck(currentPlayer)) {
-                reverseMove(playerPiece, pieceAtXY, currX, currY, newX, newY);
+                reverseMove(playerPiece, pieceAtXY, currX, currY, newX, newY, moved);
                 System.out.println("Check on the king, please play any other move!");
                 continue;
             }
@@ -166,18 +172,26 @@ public class ChessGame {
     }
 
     // reverse the move played by a player
-    private void reverseMove(ChessPiece playerPiece, ChessPiece pieceAtXY, int startX, int startY, int endX, int endY) {
+    private void reverseMove(ChessPiece playerPiece, ChessPiece pieceAtXY, int startX, int startY, int endX, int endY, boolean moved) {
         // reverse the move
-        playerPiece.moveTo(startX, startY);
+
+//        System.out.println("startX: "+startX+ " startY: "+ startY+" endX: "+endX+ " endY: "+ endY);
+
+        this.chessBoard.putPieceOnBoard(playerPiece, startX, startY);
+        playerPiece.setX(startX);
+        playerPiece.setY(startY);
+        playerPiece.hasMoved = moved;
+
         if(pieceAtXY != null) {
             this.chessBoard.putPieceOnBoard(pieceAtXY, endX, endY);
-
-            // put back the removed piece in the arraylist
+            // put back the removed piece in. the arraylist
             if(pieceAtXY.getColor() == COLOR.WHITE) {
                 this.whitePieces.add(pieceAtXY);
             } else {
                 this.blackPieces.add(pieceAtXY);
             }
+        } else {
+            this.chessBoard.putPieceOnBoard(null, endX, endY);
         }
     }
 
@@ -213,9 +227,9 @@ public class ChessGame {
     private boolean isGameOver() {
         if(isCheckMate(this.currentPlayer)) {
             if(this.currentPlayer == COLOR.WHITE) {
-                System.out.println("CHECKMATE: Black Player Own");
+                System.out.println("CHECKMATE: Black Player Won");
             } else {
-                System.out.println("CHECKMATE: White Player Own");
+                System.out.println("CHECKMATE: White Player Won");
             }
             return true;
         } else if(!doesPlayerHaveAnyMove(this.currentPlayer)) {
@@ -239,23 +253,26 @@ public class ChessGame {
                         ChessPiece pieceAtXY = this.chessBoard.chessPieceAt(x, y);
                         int currX = piece.getX();
                         int currY = piece.getY();
-
+                        boolean moved = piece.hasMoved;
                         piece.moveTo(x, y);
 
                         // after the move check if king is still in check
+
                         if(!isKingInCheck(currentPlayer)) {
+
                             // reverse the play
-                            reverseMove(piece, pieceAtXY, currX, currY, x, y);
+                            reverseMove(piece, pieceAtXY, currX, currY, x, y, moved);
                             // if king is not in check after this move we will return true
                             return true;
                         } else {
                             // reverse the play
-                            reverseMove(piece, pieceAtXY, currX, currY, x, y);
+                            reverseMove(piece, pieceAtXY, currX, currY, x, y, moved);
                         }
                     }
                 }
             }
         }
+
         return false;
     }
 }
