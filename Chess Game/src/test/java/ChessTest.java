@@ -7,6 +7,7 @@ public class ChessTest {
     private static ChessBoard chessBoard;
     @BeforeEach
     public void setupTestGame() {
+        System.out.println("reseting!");
         chessGame = new ChessGame();
         chessBoard = chessGame.getChessBoard();
     }
@@ -122,5 +123,76 @@ public class ChessTest {
         assertEquals(true, whitePawn2.checkPawnMovement(7, 4));
     }
 
+    @Test
+    public void checkStraightMovementTest() {
+        Rook blackRook = chessGame.addRook(6,2,COLOR.BLACK);
+        Rook whiteRook = chessGame.addRook(2,6,COLOR.WHITE);
 
+        // Test Path: [1, 3, 15] : Rook does not move straight
+        assertEquals(false, blackRook.checkStraightMovement(7,4));
+
+        // Test Path: [1, 2, 5, 7] : Rook moves to same location it is already at
+        assertEquals(false, blackRook.checkStraightMovement(6,2));
+
+        // Test Path: [1,2,4,8,9,11] : Rook moves one position vertically straight above
+        assertEquals(true, whiteRook.checkStraightMovement(2,5));
+
+        // Test Path: [1,2,5,6,8,9,11] : Rook moves one position vertically straight down
+        assertEquals(true, blackRook.checkStraightMovement(6,6));
+
+        // Test Path: [1,2,4,8,9,10,12] : There is opponent piece right below the rook
+        Queen whiteQueen = chessGame.addQueen(6,3,COLOR.WHITE);
+        assertEquals(false, blackRook.checkStraightMovement(6,6));
+        chessBoard.capturePiece(whiteQueen);
+
+        // Test Path: [1,2,5,6,8,9,10,12] : There is opponent piece right above the rook
+        Queen blackQueen = chessGame.addQueen(2,5,COLOR.BLACK);
+        assertEquals(false, whiteRook.checkStraightMovement(2,4));
+        chessBoard.capturePiece(blackQueen);
+
+        // Test Path: [1,2,5,6,8,9,10,13,9,11] : black Rook moves two positions straight down
+        assertEquals(true, blackRook.checkStraightMovement(6, 4));
+
+        // Test Path: [1,2,4,8,9,10,13,9,11]  : white Rook moves two positions straight up
+        assertEquals(true, whiteRook.checkStraightMovement(2, 4));
+
+        // Test Path: [1,2,4,8,9,10,13,9,10,12] : white rook moves up more than two position but finds opponents piece in its way
+        blackQueen = chessGame.addQueen(2,4,COLOR.BLACK);
+        assertEquals(false, whiteRook.checkStraightMovement(2, 3));
+        chessBoard.capturePiece(blackQueen);
+
+        // Test Path: [1,2,4,8,9,10,13,9,10,13,9,11] : whiteRook moves more than two position straight up
+        assertEquals(true, whiteRook.checkStraightMovement(2, 3));
+
+        // moving the white and black to test for horizontal moves
+        blackRook.moveTo(4, 2);
+        whiteRook.moveTo(4, 5);
+
+        // Test Path: [1,3,14,16,20,21,25] : Rook moves one position horizontally straight right
+        assertEquals(true, blackRook.checkStraightMovement(5, 2));
+
+
+        // Test Path: [1,3,14,17,18,20,21,25] : Rook moves one position horizontally straight left
+        assertEquals(true, blackRook.checkStraightMovement(3, 2));
+
+        // Test Path: [1,3,14,16,20,21,22,23] : there is opponent piece just right side
+        whiteQueen = chessGame.addQueen(5, 2, COLOR.WHITE);
+        assertEquals(false, blackRook.checkStraightMovement(6, 2));
+
+        // Test Path: 1,3,14,17,18,20,21,22,23] : there is opponent piece just left side
+        whiteQueen.moveTo(3, 2);
+        assertEquals(false, blackRook.checkStraightMovement(2, 2));
+
+        // Test Path: [1,3,14,16,20,21,22,24,21,25]: black rook moves right more than two position but finds opponents piece in its way
+        whiteQueen.moveTo(6, 2);
+        assertEquals(false, blackRook.checkStraightMovement(7, 2));
+
+        // Test Path: [1,3,14,17,18,20,21,22,24,21,25]: black rook moves left more than two position but finds opponents piece in its way
+        whiteQueen.moveTo(2, 2);
+        assertEquals(false, blackRook.checkStraightMovement(1, 2));
+        chessBoard.capturePiece(whiteQueen);
+
+        // Test Path: [1,3,14,16,20,21,22,24,21,22,24,21,25] : whiteRook moves more than two position straight up
+        assertEquals(true, blackRook.checkStraightMovement(0, 2));
+    }
 }
