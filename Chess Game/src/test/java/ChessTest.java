@@ -195,4 +195,23 @@ public class ChessTest {
         // Test Path: [1,3,14,16,20,21,22,24,21,22,24,21,25] : whiteRook moves more than two position straight up
         assertEquals(true, blackRook.checkStraightMovement(0, 2));
     }
+
+    @Test
+    public void checkDiagonalMovementTest() {
+        Queen blackQueen = chessGame.addQueen(4, 4, COLOR.BLACK);
+
+        // TestPath: [1, 3]: queen moves non-diagonal
+        assertEquals(false, blackQueen.checkDiagonalMovement(4, 6));
+
+        // Test Path: [1, 2, 4, 8, 9, 13, 14, 18, 19, 21, 23, 19, 20] : queen moves diagonally from 4, 4 to 1, 1, with no opponent's piece on the path
+        assertEquals(true, blackQueen.checkDiagonalMovement(1, 1));
+
+        // Test Path: [1, 2, 4, 8, 9, 13, 14, 18, 19, 21, 23, 19, 21, 22] : queen moves diagonally from 4, 4 to 1, 1, with opponent's piece on the path
+        Pawn whitePawn = chessGame.addPawn(2, 2, COLOR.WHITE);
+        assertEquals(false, blackQueen.checkDiagonalMovement(1, 1));
+
+        // Test Path: [1, 2, 4, 8, 9, 13, 14, 18, 19, 21, 22] : queen moves diagonally from 4, 4 to 1, 1, with opponent's piece is at 3, 3
+        whitePawn.moveTo(3, 3);
+        assertEquals(false, blackQueen.checkDiagonalMovement(1, 1));
+    }
 }
