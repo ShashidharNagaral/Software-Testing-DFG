@@ -15,6 +15,10 @@ public class ChessGame {
         this.blackPieces = new ArrayList<>();
     }
 
+    public void setCurrentPlayer(COLOR currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
     public ArrayList<ChessPiece> getBlackPieces() {
         return blackPieces;
     }
@@ -251,7 +255,7 @@ public class ChessGame {
     }
 
     // check if other player had given any check to current player
-    private boolean isKingInCheck(COLOR currentPlayer) {
+    public boolean isKingInCheck(COLOR currentPlayer) {
         King currentPlayerKing;
         ArrayList<ChessPiece> otherPlayerPieces;
 
@@ -279,16 +283,17 @@ public class ChessGame {
         return false;
     }
 
-    private boolean isGameOver() {
-        if(isCheckMate(this.currentPlayer)) {
+    public boolean isGameOver() {
+        COLOR currentPlayer = this.currentPlayer;
+        if(isCheckMate(currentPlayer)) {
             this.chessBoard.display();
-            if(this.currentPlayer == COLOR.WHITE) {
+            if(currentPlayer == COLOR.WHITE) {
                 System.out.println("CHECKMATE: Black Player Won");
             } else {
                 System.out.println("CHECKMATE: White Player Won");
             }
             return true;
-        } else if(!doesPlayerHaveAnyMove(this.currentPlayer)) {
+        } else if(!doesPlayerHaveAnyMove(currentPlayer)) {
             this.chessBoard.display();
             System.out.println("STALEMATE!");
             return true;

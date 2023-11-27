@@ -7,7 +7,6 @@ public class ChessTest {
     private static ChessBoard chessBoard;
     @BeforeEach
     public void setupTestGame() {
-        System.out.println("reseting!");
         chessGame = new ChessGame();
         chessBoard = chessGame.getChessBoard();
     }
@@ -214,4 +213,52 @@ public class ChessTest {
         whitePawn.moveTo(3, 3);
         assertEquals(false, blackQueen.checkDiagonalMovement(1, 1));
     }
+
+    @Test
+    public void isKingInCheckTest() {
+        King blacKing = chessGame.addKing(3, 2, COLOR.BLACK);
+
+        // TestPath: [1, 2, 4]: no opponent's piece to give on the king
+        assertEquals(false, chessGame.isKingInCheck(COLOR.BLACK));
+
+
+        // TestPath: [1, 2, 3, 5]: white queen gives check to the black king
+        Queen whiteQueen = chessGame.addQueen(5, 4, COLOR.WHITE);
+        assertEquals(true, chessGame.isKingInCheck(COLOR.BLACK));
+        chessBoard.capturePiece(whiteQueen);
+
+        // TestPath: [1, 2, 3, 6, 2, 4]: checking for check with more than two opponent piece, no check
+        Pawn whitePawn1 = chessGame.addPawn(6, 6, COLOR.WHITE);
+        Pawn whitePawn2 = chessGame.addPawn(5, 6, COLOR.WHITE);
+        assertEquals(false, chessGame.isKingInCheck(COLOR.BLACK));
+    }
+
+    @Test
+    public void isCheckMateTest() {
+        King blackKing = chessGame.addKing(7, 7, COLOR.BLACK);
+        Queen whiteQueen = chessGame.addQueen(5, 7, COLOR.WHITE);
+        Queen whiteRook = chessGame.addQueen(7, 5, COLOR.WHITE);
+
+        // TestPath: [1, 2]: checkmate
+        assertEquals(true, chessGame.isCheckMate(COLOR.BLACK));
+
+        // TestPath: [1, 3]: no checkmate
+        chessBoard.capturePiece(whiteRook); // removing whiteRook to remove the checkmate on the king
+        assertEquals(false, chessGame.isCheckMate(COLOR.BLACK));
+    }
+
+    @Test
+    public void isGameOverTest() {
+        // TestPath: [1 3 8] : no checkmate, no game over
+        chessGame.setCurrentPlayer(COLOR.BLACK);
+        King blackKing = chessGame.addKing(7, 7, COLOR.BLACK);
+        Queen whiteQueen = chessGame.addQueen(5, 7, COLOR.WHITE);
+        assertEquals(false, chessGame.isGameOver());
+
+        // TestPath: [1 3 7] : stalemate
+        Rook whiteRook = chessGame.addRook(6, 6, COLOR.WHITE);
+        assertEquals(true, chessGame.isGameOver());
+    }
+
+
 }
