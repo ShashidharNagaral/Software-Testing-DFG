@@ -226,6 +226,7 @@ public class ChessGame {
 
     private boolean isGameOver() {
         if(isCheckMate(this.currentPlayer)) {
+            this.chessBoard.display();
             if(this.currentPlayer == COLOR.WHITE) {
                 System.out.println("CHECKMATE: Black Player Won");
             } else {
@@ -233,6 +234,7 @@ public class ChessGame {
             }
             return true;
         } else if(!doesPlayerHaveAnyMove(this.currentPlayer)) {
+            this.chessBoard.display();
             System.out.println("STALEMATE!");
             return true;
         }
