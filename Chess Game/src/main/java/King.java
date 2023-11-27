@@ -12,7 +12,7 @@ public class King extends ChessPiece{
     }
 
 
-    private boolean checkKingMovement(int toNewX, int toNewY) {
+    public boolean checkKingMovement(int toNewX, int toNewY) {
         int absX = Math.abs(toNewX - this.getX()); // absolute difference between new X location and current X location
         int absY = Math.abs(toNewY - this.getY()); // absolute difference between new Y location and current Y location
 

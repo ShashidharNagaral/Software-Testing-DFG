@@ -12,7 +12,7 @@ public class Pawn extends ChessPiece{
         return false;
     }
 
-    private boolean checkPawnMovement(int toNewX, int toNewY){
+    public boolean checkPawnMovement(int toNewX, int toNewY){
         int moveOneStep;
         int moveTwoStep;
 
@@ -22,6 +22,7 @@ public class Pawn extends ChessPiece{
         COLOR currColor = this.getColor();
 
         ChessPiece pieceAtNewXY = chessBoard.chessPieceAt(toNewX, toNewY);
+        boolean hasMoved = this.hasMoved;
 
         if (currColor == COLOR.BLACK){
             moveOneStep = 1;
@@ -46,7 +47,7 @@ public class Pawn extends ChessPiece{
         }
         // Conditions for moving the pawn two steps forward
         // this is only possible if the pawn has never moved before in the entire game play
-        else if(!this.hasMoved) {
+        else if(!hasMoved) {
             if ((toNewY - currY) == moveTwoStep){
                 ChessPiece pieceInBetween = chessBoard.chessPieceAt(currX, moveOneStep + currY);
                 if (toNewX == currX && pieceAtNewXY == null && pieceInBetween == null){

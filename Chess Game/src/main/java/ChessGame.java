@@ -11,6 +11,8 @@ public class ChessGame {
 
     public ChessGame() {
         this.chessBoard = new ChessBoard(this);
+        this.whitePieces = new ArrayList<>();
+        this.blackPieces = new ArrayList<>();
     }
 
     public ArrayList<ChessPiece> getBlackPieces() {
@@ -19,6 +21,10 @@ public class ChessGame {
 
     public ArrayList<ChessPiece> getWhitePieces() {
         return whitePieces;
+    }
+
+    public ChessBoard getChessBoard() {
+        return chessBoard;
     }
 
     /** Layout of Chess board with coordinate axes
@@ -48,63 +54,114 @@ public class ChessGame {
         currentPlayer = COLOR.WHITE; // set current player to white
 
         // put all the BLACK pawns
-        this.blackPieces.add(new Pawn(0, 1, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Pawn(1, 1, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Pawn(2, 1, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Pawn(3, 1, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Pawn(4, 1, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Pawn(5, 1, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Pawn(6, 1, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Pawn(7, 1, COLOR.BLACK, this.chessBoard));
+        addPawn(0, 1, COLOR.BLACK);
+        addPawn(1, 1, COLOR.BLACK);
+        addPawn(2, 1, COLOR.BLACK);
+        addPawn(3, 1, COLOR.BLACK);
+        addPawn(4, 1, COLOR.BLACK);
+        addPawn(5, 1, COLOR.BLACK);
+        addPawn(6, 1, COLOR.BLACK);
+        addPawn(7, 1, COLOR.BLACK);
+
 
         // put black rooks
-        this.blackPieces.add(new Rook(0, 0, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Rook(7, 0, COLOR.BLACK, this.chessBoard));
+        addRook(0, 0, COLOR.BLACK);
+        addRook(7, 0, COLOR.BLACK);
 
         // put black knight
-        this.blackPieces.add(new Knight(1, 0, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Knight(6, 0, COLOR.BLACK, this.chessBoard));
+        addKnight(1, 0, COLOR.BLACK);
+        addKnight(6, 0, COLOR.BLACK);
 
         // put black bishops
-        this.blackPieces.add(new Bishop(2, 0, COLOR.BLACK, this.chessBoard));
-        this.blackPieces.add(new Bishop(5, 0, COLOR.BLACK, this.chessBoard));
+        addBishop(2, 0, COLOR.BLACK);
+        addBishop(5, 0, COLOR.BLACK);
 
         // put black queen
-        this.blackPieces.add(new Queen(3, 0, COLOR.BLACK, this.chessBoard));
+        addQueen(3, 0, COLOR.BLACK);
 
         // put black king
-        this.blackKing = new King(4, 0, COLOR.BLACK, this.chessBoard);
-        this.blackPieces.add(this.blackKing);
+        addKing(4, 0, COLOR.BLACK);
 
         // put all the WHITE pawns
-        this.whitePieces.add(new Pawn(0, 6, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Pawn(1, 6, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Pawn(2, 6, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Pawn(3, 6, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Pawn(4, 6, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Pawn(5, 6, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Pawn(6, 6, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Pawn(7, 6, COLOR.WHITE, this.chessBoard));
+        addPawn(0, 6, COLOR.WHITE);
+        addPawn(1, 6, COLOR.WHITE);
+        addPawn(2, 6, COLOR.WHITE);
+        addPawn(3, 6, COLOR.WHITE);
+        addPawn(4, 6, COLOR.WHITE);
+        addPawn(5, 6, COLOR.WHITE);
+        addPawn(6, 6, COLOR.WHITE);
+        addPawn(7, 6, COLOR.WHITE);
+
 
         // put white rooks
-        this.whitePieces.add(new Rook(0, 7, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Rook(7, 7, COLOR.WHITE, this.chessBoard));
+        addRook(0, 7, COLOR.WHITE);
+        addRook(7, 7, COLOR.WHITE);
 
         // put white knight
-        this.whitePieces.add(new Knight(1, 7, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Knight(6, 7, COLOR.WHITE, this.chessBoard));
+        addKnight(1, 7, COLOR.WHITE);
+        addKnight(6, 7, COLOR.WHITE);
 
         // put white bishops
-        this.whitePieces.add(new Bishop(2, 7, COLOR.WHITE, this.chessBoard));
-        this.whitePieces.add(new Bishop(5, 7, COLOR.WHITE, this.chessBoard));
+        addBishop(2, 7, COLOR.WHITE);
+        addBishop(5, 7, COLOR.WHITE);
 
         // put white queen
-        this.whitePieces.add(new Queen(3, 7, COLOR.WHITE, this.chessBoard));
+        addQueen(3, 7, COLOR.WHITE);
 
         // put white king
-        this.whiteKing = new King(4, 7, COLOR.WHITE, this.chessBoard);
-        this.whitePieces.add(this.whiteKing);
+        addKing(4, 7, COLOR.WHITE);
+
     }
+
+    public Pawn addPawn(int x, int y, COLOR color) {
+        Pawn pawn = new Pawn(x, y, color, this.chessBoard);
+        addPiece(pawn);
+        return pawn;
+    }
+
+    public Rook addRook(int x, int y, COLOR color) {
+        Rook rook = new Rook(x, y, color, this.chessBoard);
+        addPiece(rook);
+        return rook;
+    }
+
+    public Knight addKnight(int x, int y, COLOR color) {
+        Knight knight = new Knight(x, y, color, this.chessBoard);
+        addPiece(knight);
+        return knight;
+    }
+
+    public Bishop addBishop(int x, int y, COLOR color) {
+        Bishop bishop = new Bishop(x, y, color, this.chessBoard);
+        addPiece(bishop);
+        return bishop;
+    }
+
+    public Queen addQueen(int x, int y, COLOR color) {
+        Queen queen = new Queen(x, y, color, this.chessBoard);
+        addPiece(queen);
+        return queen;
+    }
+
+    public King addKing(int x, int y, COLOR color) {
+        King king = new King(x, y, color, this.chessBoard);
+        if (color == COLOR.WHITE) {
+            this.whiteKing = king;
+        } else {
+            this.blackKing = king;
+        }
+        addPiece(king);
+        return king;
+    }
+
+    private void addPiece(ChessPiece piece) {
+        if(piece.getColor() == COLOR.BLACK) {
+            this.blackPieces.add(piece);
+        } else {
+            this.whitePieces.add(piece);
+        }
+    }
+
 
     // call this method to start the game
     public void start() {
@@ -174,8 +231,6 @@ public class ChessGame {
     // reverse the move played by a player
     private void reverseMove(ChessPiece playerPiece, ChessPiece pieceAtXY, int startX, int startY, int endX, int endY, boolean moved) {
         // reverse the move
-
-//        System.out.println("startX: "+startX+ " startY: "+ startY+" endX: "+endX+ " endY: "+ endY);
 
         this.chessBoard.putPieceOnBoard(playerPiece, startX, startY);
         playerPiece.setX(startX);

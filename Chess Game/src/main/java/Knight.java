@@ -10,7 +10,7 @@ public class Knight extends ChessPiece{
         return false;
     }
 
-    private boolean checkKnightMovement(int toNewX, int toNewY) {
+    public boolean checkKnightMovement(int toNewX, int toNewY) {
 
         int currX = this.getX();
         int currY = this.getY();
