@@ -48,9 +48,19 @@ public class Pawn extends ChessPiece{
         // Conditions for moving the pawn two steps forward
         // this is only possible if the pawn has never moved before in the entire game play
         else if(!hasMoved) {
+            /*
+            // Correct Code
             if ((toNewY - currY) == moveTwoStep){
                 ChessPiece pieceInBetween = chessBoard.chessPieceAt(currX, moveOneStep + currY);
                 if (toNewX == currX && pieceAtNewXY == null && pieceInBetween == null){
+                    return true;
+                }
+            }
+            */
+
+            // Bug in below code
+            if ((toNewY - currY) == moveTwoStep){
+                if (toNewX == currX && pieceAtNewXY == null){
                     return true;
                 }
             }

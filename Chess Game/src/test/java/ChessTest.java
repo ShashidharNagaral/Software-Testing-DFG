@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,9 +96,21 @@ public class ChessTest {
         // Test Path: [1, 2, 4, 6, 11, 13, 10]
         // black pawn moves diagonal 2 steps
         assertEquals(false, blackPawn2.checkPawnMovement(4, 3));
-        // black pawn moves 2 steps with an opponent piece in between
+
+
+
         Rook whiteRook = chessGame.addRook(5, 2, COLOR.WHITE);
-        assertEquals(false, blackPawn2.checkPawnMovement(5, 3));
+        Rook blackRook = chessGame.addRook(7, 5, COLOR.BLACK);
+        Assertions.assertAll(
+                // black pawn moves 2 steps with an opponent piece in between
+                ()->Assertions.assertFalse(blackPawn2.checkPawnMovement(5, 3), "Test Case Failed -> " +
+                        "test path: [1, 2, 4, 6, 11, 13, 10], i.e  black pawn moves 2 steps with an opponent piece in between"),
+
+                // white pawn moves 2 steps with an opponent piece in between
+                ()->Assertions.assertFalse(whitePawn2.checkPawnMovement(7, 4), "Test Case Failed ->" +
+                        " test path: [1, 3, 4, 6, 11, 13, 10], i.e  white pawn moves 2 steps with an opponent piece in between")
+        );
+
         // black pawn moves 2 steps with opponent piece in that location
         whiteRook.moveTo(5, 3);
         assertEquals(false, blackPawn2.checkPawnMovement(5, 3));
@@ -105,15 +118,12 @@ public class ChessTest {
         // Test Path: [1, 3, 4, 6, 11, 13, 10]
         // white pawn moves diagonal 2 steps
         assertEquals(false, whitePawn2.checkPawnMovement(6, 4));
-        // white pawn moves 2 steps with an opponent piece in between
-        Rook blackRook = chessGame.addRook(7, 5, COLOR.BLACK);
-        assertEquals(false, whitePawn2.checkPawnMovement(7, 4));
+
         // white pawn moves 2 steps with opponent piece in that location
         whiteRook.moveTo(7, 4);
         assertEquals(false, whitePawn2.checkPawnMovement(7, 4));
         chessBoard.capturePiece(blackRook);
         chessBoard.capturePiece(whiteRook);
-
 
         // Test Path: [1, 2, 4, 6, 11, 13, 15] : black pawn moves two-step forward
         assertEquals(true, blackPawn2.checkPawnMovement(5, 3));
@@ -260,5 +270,8 @@ public class ChessTest {
         assertEquals(true, chessGame.isGameOver());
     }
 
+    public void displayCheck() {
+
+    }
 
 }
